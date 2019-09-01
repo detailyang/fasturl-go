@@ -4,8 +4,6 @@ version: "{build}"
 # Operating system (build VM template)
 os: Windows Server 2012 R2
 
-clone_folder: c:\gopath\src\github.com/detailyang/fasturl-go
-
 # environment variables
 environment:
   GOPATH: c:\gopath
