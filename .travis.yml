@@ -1,0 +1,21 @@
+os:
+  - linux
+  - osx
+sudo: false
+language: go
+go:
+  - 1.12.x
+git:
+  depth: 1
+
+# Skip the install step. Don't `go get` dependencies. Only build with the code
+# in vendor/
+install: true
+
+# Don't email me the results of the test runs.
+notifications:
+  email: false
+
+script:
+  - GO111MODULE=on make test
+  - GO111MODULE=on make bench

@@ -1,0 +1,5 @@
+*.out
+.idea
+.vscode
+*.swp
+*.test
