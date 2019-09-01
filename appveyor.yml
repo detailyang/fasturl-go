@@ -18,7 +18,6 @@ install:
 
 build_script:
   - go test -race -v ./fasturl/...
-  - go test -v -bench ./fasturl/...
 
 # to disable automatic tests
 test: off
