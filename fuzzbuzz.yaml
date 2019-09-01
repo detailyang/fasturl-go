@@ -1,0 +1,11 @@
+base: ubuntu:16.04
+targets:
+  - name: fasturl-go-url
+    language: go
+    version: "1.11"
+    corpus: ./fuzz/url/corpus
+    harness:
+      function: FuzzURL
+      # package defines where to import FuzzerEntrypoint from
+      package: github.com/detailyang/fasturl-go
+      checkout: github.com/detailyang/fasturl-go
