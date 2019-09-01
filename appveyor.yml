@@ -17,8 +17,8 @@ install:
   - go env
 
 build_script:
-  - go test -race -v .
-  - go test -v -bench .
+  - go test -race -v ./fasturl/...
+  - go test -v -bench ./fasturl/...
 
 # to disable automatic tests
 test: off
