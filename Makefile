@@ -1,3 +1,12 @@
+# Background color
+GREEN  				:= $(shell tput -Txterm setaf 2)
+YELLOW 				:= $(shell tput -Txterm setaf 3)
+BLUE 				:= $(shell tput -Txterm setaf 4)
+MAGENTA             := $(shell tput -Txterm setaf 5)
+WHITE  				:= $(shell tput -Txterm setaf 7)
+RESET  				:= $(shell tput -Txterm sgr0)
+TARGET_MAX_CHAR_NUM := 20
+
 ## Show help
 help:
 	@echo ''
