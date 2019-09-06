@@ -28,6 +28,17 @@ func FuzzURL(data []byte) int {
 	d2 := u2.Encode(nil)
 
 	if !reflect.DeepEqual(d1, d2) {
+		isSlashOnly := true
+		for i := range d1 {
+			if d1[i] != '/' {
+				isSlashOnly = false
+			}
+		}
+
+		if isSlashOnly {
+			return 1
+		}
+
 		fmt.Printf("url1: %#v\n", string(d1))
 		fmt.Printf("url2: %#v\n", string(d2))
 		panic("fail")

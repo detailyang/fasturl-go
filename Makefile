@@ -27,12 +27,12 @@ help:
 .PHONY: fuzz-url
 ## fuzz url decode and encode
 fuzz-url:
-	cd fuzz; go-fuzz-build && go-fuzz -func FuzzURL --workdir url 
+	cd fuzz; go-fuzz-build && go-fuzz -func FuzzURL --workdir url -bin url-fuzz.zip
 
 .PHONY: fuzz-query
 ## fuzz query decode and encode
 fuzz-query:
-	cd fuzz; go-fuzz-build && go-fuzz -func FuzzQuery --workdir query 
+	cd fuzz; go-fuzz-build && go-fuzz -func FuzzQuery --workdir query -bin query-fuzz.zip
 
 .PHONY: test
 ## test everything
