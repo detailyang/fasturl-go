@@ -12,6 +12,26 @@ type Path struct {
 	hash               []byte
 }
 
+// Encode encodes to []byte
+func (p *Path) Encode(b []byte, showHash bool) []byte {
+	if len(p.pathname) > 0 {
+		b = append(b, p.pathname...)
+	}
+
+	if p.query.Len() > 0 {
+		b = append(b, '?')
+		b = p.query.Encode(b)
+	}
+
+	if showHash {
+		if len(p.hash) > 0 {
+			b = append(b, p.hash...)
+		}
+	}
+
+	return b
+}
+
 // GetPathname gets the pathname
 func (p *Path) GetPathname() []byte {
 	return p.pathname
