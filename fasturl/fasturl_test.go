@@ -34,7 +34,6 @@ func TestFastURLPanic(t *testing.T) {
 		"#?",
 		"?0",
 		"0@",
-		"////",
 	} {
 		var f1 FastURL
 		err := f1.Parse([]byte(tt))
