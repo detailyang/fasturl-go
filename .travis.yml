@@ -19,16 +19,3 @@ notifications:
 script:
   - GO111MODULE=on make test
   - GO111MODULE=on make bench
-
-jobs:
-  include:
-    - stage: Build, Unit-Tests & Fuzz-Tests
-      go: 1.12.x
-      script:
-        - ./fuzz/fuzzit.sh local-regression
-
-    - stage: Fuzzit (Fuzzing)
-      if: branch = master AND type IN (push)
-      go: 1.12.x
-      script:
-        - ./fuzz/fuzzit.sh fuzzing
