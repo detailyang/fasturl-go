@@ -154,6 +154,11 @@ func (f *FastURL) Parse(url []byte) error {
 	return Parse(f, url)
 }
 
+// ParseWithoutProtocol parses the url without protocol.
+func (f *FastURL) ParseWithoutProtocol(url []byte) error {
+	return ParseWithoutProtocol(f, url)
+}
+
 // Encode encodes to []byte.
 func (f *FastURL) Encode(b []byte) []byte {
 	if len(f.protocol) > 0 {
