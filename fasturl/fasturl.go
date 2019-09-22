@@ -6,11 +6,11 @@ import (
 )
 
 var (
-	// ErrFastURLInvalidCharacter indicates the url contains invalid character
+	// ErrFastURLInvalidCharacter indicates the url contains invalid character.
 	ErrFastURLInvalidCharacter = errors.New("fasturl: invalid character in url")
 )
 
-// FastURL presents the URL
+// FastURL presents the URL.
 //
 // ┌─────────────────────────────────────────────────────────────────────────────────────────────-───┐
 // │                                              href                                               │
@@ -50,87 +50,87 @@ type FastURL struct {
 	hash               []byte
 }
 
-// GetProtocol gets the protocol
+// GetProtocol gets the protocol.
 func (f *FastURL) GetProtocol() []byte {
 	return f.protocol
 }
 
-// SetProtocol sets the protocol
+// SetProtocol sets the protocol.
 func (f *FastURL) SetProtocol(p string) {
 	f.protocol = append(f.protocol[:0], p...)
 }
 
-// GetAuth gets the auth
+// GetAuth gets the auth.
 func (f *FastURL) GetAuth() []byte {
 	return f.auth
 }
 
-// GetUser gets the username
+// GetUser gets the username.
 func (f *FastURL) GetUser() []byte {
 	return f.user
 }
 
-// SetUser sets the username
+// SetUser sets the username.
 func (f *FastURL) SetUser(username string) {
 	f.user = append(f.user[:0], username...)
 }
 
-// GetPass gets the password
+// GetPass gets the password.
 func (f *FastURL) GetPass() []byte {
 	return f.pass
 }
 
-// SetPass sets the password
+// SetPass sets the password.
 func (f *FastURL) SetPass(password string) {
 	f.pass = append(f.pass[:0], password...)
 }
 
-// GetHost gets the host which include hostname and port
+// GetHost gets the host which include hostname and port.
 func (f *FastURL) GetHost() []byte {
 	return f.host
 }
 
-// GetHostname gets the hostname
+// GetHostname gets the hostname.
 func (f *FastURL) GetHostname() []byte {
 	return f.hostname
 }
 
-// SetHostname sets the hostname
+// SetHostname sets the hostname.
 func (f *FastURL) SetHostname(hostname string) {
 	f.hostname = append(f.hostname[:0], hostname...)
 }
 
-// GetPort gets the port
+// GetPort gets the port.
 func (f *FastURL) GetPort() []byte {
 	return f.port
 }
 
-// SetPort sets the port
+// SetPort sets the port.
 func (f *FastURL) SetPort(port string) {
 	f.port = append(f.port[:0], port...)
 }
 
-// GetPathname gets the pathname
+// GetPathname gets the pathname.
 func (f *FastURL) GetPathname() []byte {
 	return f.pathname
 }
 
-// SetPathname sets the pathname
+// SetPathname sets the pathname.
 func (f *FastURL) SetPathname(p string) {
 	f.pathname = append(f.pathname[:0], p...)
 }
 
-// GetNormalizedPathname gets the normalized pathname
+// GetNormalizedPathname gets the normalized pathname.
 func (f *FastURL) GetNormalizedPathname() []byte {
 	return f.normalizedPathname
 }
 
-// GetRawQuery gets the raw query string
+// GetRawQuery gets the raw query string.
 func (f *FastURL) GetRawQuery() []byte {
 	return f.rawquery
 }
 
-// GetQuery gets the query
+// GetQuery gets the query.
 func (f *FastURL) GetQuery() *Query {
 	if !f.parsequery {
 		f.query.Decode(f.rawquery)
@@ -139,22 +139,22 @@ func (f *FastURL) GetQuery() *Query {
 	return &f.query
 }
 
-// GetHash gets the hash
+// GetHash gets the hash.
 func (f *FastURL) GetHash() []byte {
 	return f.hash
 }
 
-// SetHash sets the hash
+// SetHash sets the hash.
 func (f *FastURL) SetHash(hash string) {
 	f.hash = append(f.hash[:0], hash...)
 }
 
-// Parse parses the url
+// Parse parses the url.
 func (f *FastURL) Parse(url []byte) error {
 	return Parse(f, url)
 }
 
-// Encode encodes to []byte
+// Encode encodes to []byte.
 func (f *FastURL) Encode(b []byte) []byte {
 	if len(f.protocol) > 0 {
 		b = append(b, f.protocol...)
@@ -204,7 +204,7 @@ func (f *FastURL) Encode(b []byte) []byte {
 	return b
 }
 
-// Reset resets the FastURL
+// Reset resets the FastURL.
 func (f *FastURL) Reset() {
 	f.protocol = f.protocol[:0]
 	f.auth = f.auth[:0]
@@ -221,8 +221,25 @@ func (f *FastURL) Reset() {
 	f.query.Reset()
 }
 
-// Parse parse the url to FastURL
+// ParseWithoutProtocol parses the url to FastURL without protocol.
+func ParseWithoutProtocol(f *FastURL, url []byte) error {
+	return parse(f, url, parseOption{
+		ParseProtocol: false,
+	})
+}
+
+// Parse parses the url to FastURL.
 func Parse(f *FastURL, url []byte) error {
+	return parse(f, url, parseOption{
+		ParseProtocol: true,
+	})
+}
+
+type parseOption struct {
+	ParseProtocol bool
+}
+
+func parse(f *FastURL, url []byte, o parseOption) error {
 	// Find hash
 	hashIndex := bytes.IndexByte(url, '#')
 	if hashIndex >= 0 {
@@ -242,21 +259,23 @@ func Parse(f *FastURL, url []byte) error {
 	}
 
 	pos := 0
-	// Trim //
-	if len(url) >= 2 && string(url[0:2]) == "//" {
-		pos += 2
-	} else {
-		// Find protocol
-		pi := bytes.IndexByte(url[pos:], ':')
-		if pi >= 0 {
-			f.protocol = append(f.protocol[:0], url[:pi]...)
-			toLowercsaeASCII(f.protocol)
-			pos += pi + 1
-		}
+	if o.ParseProtocol {
 		// Trim //
-		if len(url[pos:]) >= 2 && string(url[pos:pos+2]) == "//" {
+		if len(url) >= 2 && string(url[0:2]) == "//" {
 			pos += 2
+		} else {
+			// Find protocol
+			pi := bytes.IndexByte(url[pos:], ':')
+			if pi >= 0 {
+				f.protocol = append(f.protocol[:0], url[:pi]...)
+				toLowercsaeASCII(f.protocol)
+				pos += pi + 1
+			}
+			// Trim //
+			if len(url[pos:]) >= 2 && string(url[pos:pos+2]) == "//" {
+				pos += 2
 
+			}
 		}
 	}
 
