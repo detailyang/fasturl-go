@@ -225,6 +225,19 @@ func TestFastURLParse(t *testing.T) {
 			query:    "baz=quux",
 			pathname: "/foo/bar",
 		},
+		T{
+			input:    "http://www.google.com:443",
+			protocol: "http",
+			host:     "www.google.com:443",
+			auth:     "",
+			user:     "",
+			pass:     "",
+			hostname: "www.google.com",
+			port:     "443",
+			hash:     "",
+			query:    "",
+			pathname: "/",
+		},
 	}
 
 	var f FastURL
