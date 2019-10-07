@@ -14,7 +14,7 @@ func TestPath(t *testing.T) {
 	require.Nil(t, err)
 	require.Equal(t, "/abcdef", string(p.GetPathname()))
 	require.Equal(t, "#hash", string(p.GetHash()))
-	v, ok := p.GetQuery().Get([]byte("d"))
+	v, ok := p.GetQuery().GetBytes([]byte("d"))
 	require.Equal(t, true, ok)
 	require.Equal(t, "1", string(v))
 }

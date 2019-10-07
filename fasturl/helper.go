@@ -2,7 +2,16 @@ package fasturl
 
 import (
 	"bytes"
+	"unsafe"
 )
+
+func b2s(bs []byte) string {
+	return *(*string)(unsafe.Pointer(&bs))
+}
+
+func s2b(s string) []byte {
+	return *(*[]byte)(unsafe.Pointer(&s))
+}
 
 func toLowercsaeASCII(b []byte) {
 	for i := range b {

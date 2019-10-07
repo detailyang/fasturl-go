@@ -60,16 +60,16 @@ func TestFastURLQuery(t *testing.T) {
 	require.Nil(t, err)
 	v := f.GetQuery()
 
-	z, ok := v.Get([]byte("foo"))
+	z, ok := v.GetBytes([]byte("foo"))
 	require.True(t, ok)
 	require.Equal(t, "bar", string(z))
 
-	z, ok = v.Get([]byte("bar"))
+	z, ok = v.GetBytes([]byte("bar"))
 	require.True(t, ok)
 	require.Equal(t, "1", string(z))
 
 	values := [][]byte{}
-	v.GetAll([]byte("bar"), func(value []byte) bool {
+	v.GetAllBytes([]byte("bar"), func(value []byte) bool {
 		values = append(values, value)
 		return true
 	})

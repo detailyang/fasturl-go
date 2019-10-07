@@ -36,8 +36,12 @@ func (q *Query) Reset() {
 	q.pairs = q.pairs[:0]
 }
 
-// GetAll returns all query who name is equal to name
-func (q *Query) GetAll(name []byte, fn func(value []byte) bool) {
+func (q *Query) GetAll(name string, fn func(value []byte) bool) {
+	q.GetAllBytes(s2b(name), fn)
+}
+
+// GetAllBytes returns all query who name is equal to name
+func (q *Query) GetAllBytes(name []byte, fn func(value []byte) bool) {
 	for i := range q.pairs {
 		pair := q.pairs[i]
 		if bytes.Equal(pair.name, name) {
@@ -48,8 +52,12 @@ func (q *Query) GetAll(name []byte, fn func(value []byte) bool) {
 	}
 }
 
-// Get gets the value from name
-func (q *Query) Get(name []byte) ([]byte, bool) {
+func (q *Query) Get(name string) ([]byte, bool) {
+	return q.GetBytes(s2b(name))
+}
+
+// GetBytes gets the value from name
+func (q *Query) GetBytes(name []byte) ([]byte, bool) {
 	for i := range q.pairs {
 		pair := q.pairs[i]
 		if bytes.Equal(pair.name, name) {
@@ -59,13 +67,21 @@ func (q *Query) Get(name []byte) ([]byte, bool) {
 	return nil, false
 }
 
-// Del dels the name
-func (q *Query) Del(name []byte) {
+func (q *Query) Del(name string) {
+	q.DelBytes(s2b(name))
+}
+
+// DelBytes dels the name
+func (q *Query) DelBytes(name []byte) {
 	q.del(name, false)
 }
 
-// DelAll dels all the value who name is equal to name
-func (q *Query) DelAll(name []byte) {
+func (q *Query) DelAll(name string) {
+	q.DelAllBytes(s2b(name))
+}
+
+// DelAllBytes dels all the value who name is equal to name
+func (q *Query) DelAllBytes(name []byte) {
 	q.del(name, true)
 }
 
@@ -82,14 +98,22 @@ func (q *Query) del(name []byte, all bool) {
 	}
 }
 
-// Add adds the value
-func (q *Query) Add(name, value []byte) {
+func (q *Query) Add(name, value string) {
+	q.AddBytes(s2b(name), s2b(value))
+}
+
+// AddBytes adds the value
+func (q *Query) AddBytes(name, value []byte) {
 	pair := q.alloc()
 	pair.set(name, value)
 }
 
-// Set sets or adds the name
-func (q *Query) Set(name, value []byte) {
+func (q *Query) Set(name, value string) {
+	q.SetBytes(s2b(name), s2b(value))
+}
+
+// SetBytes sets or adds the name
+func (q *Query) SetBytes(name, value []byte) {
 	for i := range q.pairs {
 		if bytes.Equal(q.pairs[i].name, name) {
 			q.pairs[i].value = append(q.pairs[i].value[:0], value...)
@@ -97,7 +121,7 @@ func (q *Query) Set(name, value []byte) {
 		}
 	}
 
-	q.Add(name, value)
+	q.AddBytes(name, value)
 }
 
 func (q *Query) alloc() *QueryPair {
